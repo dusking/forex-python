@@ -1,0 +1,13 @@
+
+functions:
+    bitcoin:
+        runtime: python2.7
+        handler: handler.get_bitcoin_value
+        description: "get current bitcoin value"
+        qparams:
+            movie:
+                type: string
+                description: "the movie name"
+                required: true
+        memory: 128
+        timeout: 30

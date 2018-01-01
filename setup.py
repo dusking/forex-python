@@ -1,5 +1,4 @@
 import io
-import os
 from setuptools import setup, find_packages
 
 VERSION = '0.3.2'
@@ -11,7 +10,7 @@ setup(
     author_email='hello@micropyramid.com',
     url='https://github.com/MicroPyramid/forex-python',
     description='Foreign exchange rates and currency conversion.',
-    long_description="\n\n".join([open("README.rst", encoding='utf-8').read()]),
+    long_description="\n\n".join([io.open("README.rst", encoding='utf-8').read()]),
     packages=find_packages(exclude=['tests', 'tests.*']),
     include_package_data=True,
     install_requires=[
