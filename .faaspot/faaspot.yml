@@ -1,0 +1,91 @@
+
+logo: http://www.fixforeignexchange.com/logo_FIX-01.jpg
+description: >
+    Foreign exchange rates, Bitcoin price index and currency conversion.\n
+    This API expose foreign exchange rates and currency conversion.
+    Results can be rounded to given number o digit, and be formatted with thousands separator.
+stars: 136
+functions:
+    get_currency:
+        runtime: python2.7
+        handler: wrapper.wrapper_get_currency
+        description: Get currency
+        memory: 128
+        timeout: 30
+        properties:            
+            source_currency:
+                description: The source currency
+                type: string  
+                required: true
+            target_currency:
+                description: The target currency
+                type: string 
+            ndigits:
+                description: Number of digit to round to, after the decimal point
+                type: integer 
+        samples:
+            -   args: 
+                    source_currency: \"USD\"
+                name: Sample 1
+            -   args: 
+                    source_currency: \"USD\"
+                    target_currency: \"ILS\"
+                name: Sample 2
+    currency_exchange:
+        runtime: python2.7
+        handler: wrapper.wrapper_exchange
+        description: Currency exchange
+        memory: 128
+        timeout: 30
+        properties:            
+            source_currency:
+                description: The source currency
+                type: string  
+                required: true
+            target_currency:
+                description: The target currency
+                type: string  
+                required: true
+            amount:
+                description: The source amount
+                type: number 
+                default: 1
+            ndigits:
+                description: Number of digit to round to, after the decimal point
+                type: integer 
+            thousands_separator:
+                description: Number format with comma separator
+                type: boolean
+                default: false
+        samples:
+            -   args: 
+                    source_currency: USD
+                    target_currency: ILS
+                    amount: 1.5
+                    ndigits: 2
+                name: Sample 1
+            -   args: 
+                    source_currency: USD
+                    target_currency: ILS
+                    amount: 1528
+                    ndigits: 2
+                    thousands_separator: true
+                name: Comma separator
+    country_currency:
+        runtime: python2.7
+        handler: wrapper.wrapper_country_currency
+        description: Currency exchange
+        memory: 128
+        timeout: 30
+        properties:            
+            country:
+                description: The country name
+                type: string  
+                required: true            
+        samples:
+            -   args: 
+                    country: Israel                    
+                name: Sample 1
+            -   args: 
+                    country: USA                    
+                name: Sample 2
