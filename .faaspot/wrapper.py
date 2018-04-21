@@ -134,6 +134,26 @@ get_currency_schema = {
 def wrapper_get_currency(*args, **kwargs):
     return get_currency(*args, **kwargs)
 
+wrapper_exchange_schema = {
+    'required': ['source_currency'],
+    'properties':  {
+        'ndigits': {'type': 'integer'},
+        'source_currency': {'type': 'string'},
+        'target_currency': {'type': 'string'},
+        'amount': {'type': 'number'},
+        'ndigits': {'type': 'integer'},
+        'thousands_separator': {'type': 'boolean'},
+    }}
+
+@endpoint(wrapper_exchange_schema)
+def wrapper_exchange(*args, **kwargs):
+    return currency_exchange(*args, **kwargs)
+
+
+@endpoint()
+def wrapper_country_currency(*args, **kwargs):
+    return get_country_currency(*args, **kwargs)
+
 
 # def wrapper_old(event, context):
 #     print ("event: {0}".format(event))
@@ -170,7 +190,7 @@ def wrapper_get_currency(*args, **kwargs):
 #     }
 
 
-def wrapper_exchange(event, context):
+def wrapper_exchange_old(event, context):
     print ("event: {0}".format(event))
     print ("context: {0}".format(context))
     body = event.get("body", "{}")
@@ -205,7 +225,7 @@ def wrapper_exchange(event, context):
     }
 
 
-def wrapper_country_currency(event, context):
+def wrapper_country_currency_old(event, context):
     print ("event: {0}".format(event))
     print ("context: {0}".format(context))
     body = event.get("body", "{}")

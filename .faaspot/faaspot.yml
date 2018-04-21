@@ -25,12 +25,17 @@ functions:
                 type: integer 
         samples:
             -   args: 
-                    source_currency: \"USD\"
-                name: Sample 1
+                    source_currency: USD
+                name: Only source currency
             -   args: 
-                    source_currency: \"USD\"
-                    target_currency: \"ILS\"
-                name: Sample 2
+                    source_currency: USD
+                    target_currency: ILS
+                name: Source and target
+            -   args: 
+                    source_currency: USD
+                    target_currency: ILS
+                    ndigis: 2
+                name: Rounded results
     currency_exchange:
         runtime: python2.7
         handler: wrapper.wrapper_exchange
