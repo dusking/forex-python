@@ -66,7 +66,8 @@ def endpoint(schema=None):
             event, context = args
             print ("event: {0}".format(event))
             print ("context: {0}".format(context))
-            body = event.get("body", "{}")
+            body = event.get("body")
+            body = body or '{}'  # for some reason, event.get("body", '{}') doesn't work
             
             try:
                 body = json.loads(body)
@@ -78,9 +79,9 @@ def endpoint(schema=None):
                 try:
                     validate(body, schema)
                 except (ValidationError, SchemaError) as ex:
-                    element = ex.path[0]
+                    element = '{} - '.format(ex.path[0]) if len(ex.path) else ''
                     message = ex.message
-                    err_message = '{} - {}'.format(element, message)
+                    err_message = '{}{}'.format(element, message).strip()
                     return {
                         'statusCode': 400,
                         'body': json.dumps({'error': err_message}),
@@ -135,7 +136,7 @@ def wrapper_get_currency(*args, **kwargs):
     return get_currency(*args, **kwargs)
 
 wrapper_exchange_schema = {
-    'required': ['source_currency'],
+    'required': ['source_currency', 'target_currency'],
     'properties':  {
         'ndigits': {'type': 'integer'},
         'source_currency': {'type': 'string'},

@@ -34,7 +34,7 @@ functions:
             -   args: 
                     source_currency: USD
                     target_currency: ILS
-                    ndigis: 2
+                    ndigits: 2
                 name: Rounded results
     currency_exchange:
         runtime: python2.7
@@ -68,14 +68,14 @@ functions:
                     target_currency: ILS
                     amount: 1.5
                     ndigits: 2
-                name: Sample 1
+                name: USD to ILS
             -   args: 
                     source_currency: USD
                     target_currency: ILS
                     amount: 1528
                     ndigits: 2
                     thousands_separator: true
-                name: Comma separator
+                name: Comma separator result
     country_currency:
         runtime: python2.7
         handler: wrapper.wrapper_country_currency
@@ -90,7 +90,7 @@ functions:
         samples:
             -   args: 
                     country: Israel                    
-                name: Sample 1
+                name: Israel
             -   args: 
                     country: USA                    
-                name: Sample 2
+                name: USA
