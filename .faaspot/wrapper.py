@@ -143,7 +143,7 @@ wrapper_exchange_schema = {
         'target_currency': {'type': 'string'},
         'amount': {'type': 'number'},
         'ndigits': {'type': 'integer'},
-        'thousands_separator': {'type': 'boolean'},
+        'thousands_separator': {'type': 'boolean'}
     }}
 
 @endpoint(wrapper_exchange_schema)
@@ -151,7 +151,13 @@ def wrapper_exchange(*args, **kwargs):
     return currency_exchange(*args, **kwargs)
 
 
-@endpoint()
+wrapper_country_currency_schema = {
+    'required': ['country'],
+    'properties':  {
+        'country': {'type': 'string'}
+    }}
+
+@endpoint(wrapper_country_currency_schema)
 def wrapper_country_currency(*args, **kwargs):
     return get_country_currency(*args, **kwargs)
 
@@ -191,74 +197,74 @@ def wrapper_country_currency(*args, **kwargs):
 #     }
 
 
-def wrapper_exchange_old(event, context):
-    print ("event: {0}".format(event))
-    print ("context: {0}".format(context))
-    body = event.get("body", "{}")
-    try:
-        body = json.loads(body)
-    except ValueError:
-        body = urlparse.parse_qs(body)  
-        body = {k: v[0] for k, v in body.iteritems()}
-    headers = event.get("headers", {})        
-    token = headers.get('Token')    
-    user_ip = headers.get('X-Forwarded-For')
+# def wrapper_exchange_old(event, context):
+#     print ("event: {0}".format(event))
+#     print ("context: {0}".format(context))
+#     body = event.get("body", "{}")
+#     try:
+#         body = json.loads(body)
+#     except ValueError:
+#         body = urlparse.parse_qs(body)  
+#         body = {k: v[0] for k, v in body.iteritems()}
+#     headers = event.get("headers", {})        
+#     token = headers.get('Token')    
+#     user_ip = headers.get('X-Forwarded-For')
 
-    result = validate_token(token)
-    err = result.get('error')
-    if err:
-        return {
-            'statusCode': 400,
-            'body': json.dumps({'error': err}),
-            'headers': {"Content-Type": "application/json"}
-        }
-    user_data = result.get('user_data')
-    user_id = user_data.split(':')[0]
-    function_name = event.get('uri').split('/')[-1]
-    function_id = context.get('functionId')
-    update_usage(user_id, user_ip, function_id, function_name)
+#     result = validate_token(token)
+#     err = result.get('error')
+#     if err:
+#         return {
+#             'statusCode': 400,
+#             'body': json.dumps({'error': err}),
+#             'headers': {"Content-Type": "application/json"}
+#         }
+#     user_data = result.get('user_data')
+#     user_id = user_data.split(':')[0]
+#     function_name = event.get('uri').split('/')[-1]
+#     function_id = context.get('functionId')
+#     update_usage(user_id, user_ip, function_id, function_name)
     
-    response = json.dumps(currency_exchange(body))    
-    return {
-        'statusCode': 200,
-        'body': response,
-        'headers': {"Content-Type": "application/json"}
-    }
+#     response = json.dumps(currency_exchange(body))    
+#     return {
+#         'statusCode': 200,
+#         'body': response,
+#         'headers': {"Content-Type": "application/json"}
+#     }
 
 
-def wrapper_country_currency_old(event, context):
-    print ("event: {0}".format(event))
-    print ("context: {0}".format(context))
-    body = event.get("body", "{}")
-    try:
-        body = json.loads(body)
-    except ValueError:
-        body = urlparse.parse_qs(body)  
-        body = {k: v[0] for k, v in body.iteritems()}
-    headers = event.get("headers", {})        
-    token = headers.get('Token')    
-    user_ip = headers.get('X-Forwarded-For')
+# def wrapper_country_currency_old(event, context):
+#     print ("event: {0}".format(event))
+#     print ("context: {0}".format(context))
+#     body = event.get("body", "{}")
+#     try:
+#         body = json.loads(body)
+#     except ValueError:
+#         body = urlparse.parse_qs(body)  
+#         body = {k: v[0] for k, v in body.iteritems()}
+#     headers = event.get("headers", {})        
+#     token = headers.get('Token')    
+#     user_ip = headers.get('X-Forwarded-For')
 
-    result = validate_token(token)
-    err = result.get('error')
-    if err:
-        return {
-            'statusCode': 400,
-            'body': json.dumps({'error': err}),
-            'headers': {"Content-Type": "application/json"}
-        }
-    user_data = result.get('user_data')
-    user_id = user_data.split(':')[0]
-    function_name = event.get('uri').split('/')[-1]
-    function_id = context.get('functionId')
-    update_usage(user_id, user_ip, function_id, function_name)
+#     result = validate_token(token)
+#     err = result.get('error')
+#     if err:
+#         return {
+#             'statusCode': 400,
+#             'body': json.dumps({'error': err}),
+#             'headers': {"Content-Type": "application/json"}
+#         }
+#     user_data = result.get('user_data')
+#     user_id = user_data.split(':')[0]
+#     function_name = event.get('uri').split('/')[-1]
+#     function_id = context.get('functionId')
+#     update_usage(user_id, user_ip, function_id, function_name)
     
-    response = json.dumps(get_country_currency(body))    
-    return {
-        'statusCode': 200,
-        'body': response,
-        'headers': {"Content-Type": "application/json"}
-    }
+#     response = json.dumps(get_country_currency(body))    
+#     return {
+#         'statusCode': 200,
+#         'body': response,
+#         'headers': {"Content-Type": "application/json"}
+#     }
 
 
 # event = {u'body': u'{"source_currency":"usd","target_currency":"ils","ndigits":"2"}', u'uri': u'https://app-2bc38fc4-add-demo-execute-function1.spotinst.io/get_currency', u'headers': {u'Content-Length': u'63', u'Request-Source': u'external', u'X-Forwarded-Port': u'443', u'X-Forwarded-For': u'52.6.120.182', u'Host': u'app-2bc38fc4-add-demo-execute-function1.spotinst.io', u'Accept': u'application/json', u'User-Agent': u'curl/7.35.0', u'X-Real-IP': u'52.6.120.182', u'Token': u'Basic 1664d39eaa6eac4ac31cde6e5dd7f217bb528cfc9edb673883f061394076d934', u'X-Forwarded-Proto': u'https', u'X-Custom-ReferrerB': u'52.6.120.182', u'X-Custom-ReferrerA': u'52.6.120.182', u'Content-Type': u'application/json'}, u'query': {}}
