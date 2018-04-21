@@ -39,7 +39,7 @@ functions:
     currency_exchange:
         runtime: python2.7
         handler: wrapper.wrapper_exchange
-        description: Currency exchange
+        description: Perform currency exchnage
         memory: 128
         timeout: 30
         properties:            
@@ -79,7 +79,7 @@ functions:
     country_currency:
         runtime: python2.7
         handler: wrapper.wrapper_country_currency
-        description: Currency exchange
+        description: Get the country currency
         memory: 128
         timeout: 30
         properties:            
