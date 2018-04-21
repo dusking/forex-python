@@ -19,7 +19,7 @@ def format_value(value, thousands_separator=None, ndigits=None):
     if thousands_separator and ndigits:
         return "{:,.{}f}".format(value, ndigits)
     elif ndigits:
-        return  "{:,.{}f}".format(value, ndigits)
+        return  "{:.{}f}".format(value, ndigits)
     elif thousands_separator:
         return  "{:,}".format(value)
     return value
@@ -59,6 +59,7 @@ def currency_exchange(args):
     print("source_currency_code: {}".format(source_currency_code))
     print("target_currency_code: {}".format(target_currency_code))
     print("amount: {}".format(amount))
+    print("thousands_separator: {}".format(thousands_separator))
     amount = float(amount)
     c = CurrencyRates(force_decimal=False)
     value = c.convert(source_currency_code, target_currency_code, amount)   
