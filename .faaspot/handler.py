@@ -11,6 +11,7 @@ from forex_python.converter import CurrencyCodes
 from moneyed import Money
 from moneyed.localization import format_money
 
+from restcountries import RestCountryApiV2 as rapi
 
 DEFAULT_BASE_CURRENCY_CODE = 'USD'
 
@@ -70,6 +71,20 @@ def currency_exchange(args):
 
 
 def get_country_currency(args):
+    country_lookup = args.get('country')
+    try:
+        country_list = rapi.get_countries_by_name(country_lookup)
+    except Exception as InvalidURL:
+        return {'error': 'failed to find `{}`'.format(country_lookup)}
+    if len(country_list) > 1:
+        return {'error': 'found more than one country for: `{}`'.format(country_lookup)}
+    country = country_list[0]
+    currency = country.currencies[0]
+    return {'country_name': country.name, 'country_code': country.alpha3_code, 'currency_code': currency.code, 
+            'currency_name': currency.name, 'currency_symbol': currency.symbol}
+
+
+def old_get_country_currency(args):
     country_lookup = args.get('country')
     # lookup (vs get) will perform case insensitively without knowing which key the value may match 
     # it's instead of: country = pycountry.countries.get(name=name)

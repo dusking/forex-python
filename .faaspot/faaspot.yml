@@ -89,8 +89,8 @@ functions:
                 required: true            
         samples:
             -   args: 
-                    country: Israel                    
-                name: Israel
+                    country: France                    
+                name: France
             -   args: 
                     country: USA                    
                 name: USA
