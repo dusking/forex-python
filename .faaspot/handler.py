@@ -74,7 +74,7 @@ def get_country_currency(args):
     country_lookup = args.get('country')
     try:
         country_list = rapi.get_countries_by_name(country_lookup)
-    except Exception as InvalidURL:
+    except Exception:
         return {'error': 'failed to find `{}`'.format(country_lookup)}
     if len(country_list) > 1:
         return {'error': 'found more than one country for: `{}`'.format(country_lookup)}
