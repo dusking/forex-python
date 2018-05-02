@@ -29,11 +29,11 @@ functions:
                 name: Only source currency
             -   args: 
                     source_currency: USD
-                    target_currency: ILS
+                    target_currency: EUR
                 name: Source and target
             -   args: 
                     source_currency: USD
-                    target_currency: ILS
+                    target_currency: EUR
                     ndigits: 2
                 name: Rounded results
     currency_exchange:
@@ -65,13 +65,13 @@ functions:
         samples:
             -   args: 
                     source_currency: USD
-                    target_currency: ILS
+                    target_currency: EUR
                     amount: 1.5
                     ndigits: 2
-                name: USD to ILS
+                name: USD to EUR
             -   args: 
                     source_currency: USD
-                    target_currency: ILS
+                    target_currency: EUR
                     amount: 1528
                     ndigits: 2
                     thousands_separator: true

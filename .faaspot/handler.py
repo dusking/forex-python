@@ -38,9 +38,9 @@ def get_currency(args):
     info = c.get_rates(source_currency_code)    
     info =  {k: format_value(v, thousands_separator, ndigits) for k, v in info.iteritems()}
     if target_currency_code:
+        target_currency_code = target_currency_code.upper()
         if target_currency_code not in info:
             raise Exception("Unrecognized `{}` currency".format(target_currency_code))
-        target_currency_code = target_currency_code.upper()
         response['target'] = target_currency_code
         info = info.get(target_currency_code)
     response['currency'] = info
@@ -56,6 +56,8 @@ def currency_exchange(args):
     if not amount:
         # for some reason, args.get('amount', '1') doesn't work..
         amount = 1
+    source_currency_code = source_currency_code.upper()
+    target_currency_code = target_currency_code.upper()
     print("source_currency_code: {}".format(source_currency_code))
     print("target_currency_code: {}".format(target_currency_code))
     print("amount: {}".format(amount))
@@ -75,8 +77,11 @@ def get_country_currency(args):
         print "Searching for: {}".format(country_lookup)
         country = pycountry.countries.lookup(country_lookup)
     except Exception:
-        return {}
-    currency = pycountry.currencies.get(numeric=country.numeric)
+        return {'error': 'failed to find `{}`'.format(country)}
+    try:
+        currency = pycountry.currencies.get(numeric=country.numeric)
+    except Exception:
+        return {'error': 'failed to find currency of `{}`'.format(country.name)}
     return {'country_name': country.name, 'country_code': country.alpha_2, 'currency_code': currency.alpha_3, 'currency_name': currency.name}
 
 
@@ -101,4 +106,4 @@ def get_bitcoin_value(event, context):
 
 # print get_currency({'source_currency': 'USD', 'target_currency': 'ILS'})
 # print convert_currency({'source_currency': 'USD', 'target_currency': 'ILS', 'amount': '1'})
-# print get_country_currency({'country': 'Israel'})
+print get_country_currency({'country': 'France'})
