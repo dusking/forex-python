@@ -80,8 +80,8 @@ def get_country_currency(args):
         return {'error': 'found more than one country for: `{}`'.format(country_lookup)}
     country = country_list[0]
     currency = country.currencies[0]
-    return {'country_name': country.name, 'country_code': country.alpha3_code, 'currency_code': currency.code, 
-            'currency_name': currency.name, 'currency_symbol': currency.symbol}
+    return {'country_name': country.name, 'country_code': country.alpha3_code, 'currency_code': currency['code'], 
+            'currency_name': currency['name'], 'currency_symbol': currency['symbol']}
 
 
 def old_get_country_currency(args):
@@ -97,7 +97,8 @@ def old_get_country_currency(args):
         currency = pycountry.currencies.get(numeric=country.numeric)
     except Exception:
         return {'error': 'failed to find currency of `{}`'.format(country.name)}
-    return {'country_name': country.name, 'country_code': country.alpha_2, 'currency_code': currency.alpha_3, 'currency_name': currency.name}
+    return {'country_name': country.name, 'country_code': country.alpha_2, 'currency_code': currency.alpha_3, 
+            'currency_name': currency.name}
 
 
 def get_formatted_money(args):
