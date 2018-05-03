@@ -83,14 +83,24 @@ functions:
         memory: 128
         timeout: 30
         properties:            
-            country:
+            name:
                 description: The country name
-                type: string  
-                required: true            
+                type: string
+            code:
+                description: The country code
+                type: string
+        # oneOf: 
+        #     - required:
+        #         name
+        #     - required:
+        #         code
         samples:
             -   args: 
                     country: France                    
-                name: France
+                name: Get country by name
             -   args: 
-                    country: USA                    
-                name: USA
+                    code: FRA
+                name: Get country by ALPHA-3 Code
+            -   args: 
+                    code: FR
+                name: Get country by ALPHA-2 Code

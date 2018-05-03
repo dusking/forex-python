@@ -70,10 +70,16 @@ def currency_exchange(args):
     return {'source': source_currency_code, 'target': target_currency_code, 'amount': amount, 'value': value}
 
 
-def get_country_currency(args):
-    country_lookup = args.get('country')
+def get_country_currency(args):    
+    lookup_options = ['name', 'code']
+    lookup_type = {i for i in lookup_options if i in args}.pop()
+    lookup_functions = {'name': rapi.get_countries_by_name,
+                        'code': rapi.get_country_by_country_code}
+    country_lookup = args.get(lookup_type)                        
     try:
-        country_list = rapi.get_countries_by_name(country_lookup)
+        country_list = lookup_functions[lookup_type](country_lookup)
+        if not isinstance(country_list, list):
+            country_list = [country_list]
     except Exception:
         return {'error': 'failed to find `{}`'.format(country_lookup)}
     if len(country_list) > 1:
@@ -82,23 +88,6 @@ def get_country_currency(args):
     currency = country.currencies[0]
     return {'country_name': country.name, 'country_code': country.alpha3_code, 'currency_code': currency['code'], 
             'currency_name': currency['name'], 'currency_symbol': currency['symbol']}
-
-
-def old_get_country_currency(args):
-    country_lookup = args.get('country')
-    # lookup (vs get) will perform case insensitively without knowing which key the value may match 
-    # it's instead of: country = pycountry.countries.get(name=name)
-    try:
-        print "Searching for: {}".format(country_lookup)
-        country = pycountry.countries.lookup(country_lookup)
-    except Exception:
-        return {'error': 'failed to find `{}`'.format(country)}
-    try:
-        currency = pycountry.currencies.get(numeric=country.numeric)
-    except Exception:
-        return {'error': 'failed to find currency of `{}`'.format(country.name)}
-    return {'country_name': country.name, 'country_code': country.alpha_2, 'currency_code': currency.alpha_3, 
-            'currency_name': currency.name}
 
 
 def get_formatted_money(args):
@@ -122,4 +111,5 @@ def get_bitcoin_value(event, context):
 
 # print get_currency({'source_currency': 'USD', 'target_currency': 'ILS'})
 # print convert_currency({'source_currency': 'USD', 'target_currency': 'ILS', 'amount': '1'})
-print get_country_currency({'country': 'France'})
+# print get_country_currency({'country': 'France'})
+# print get_country_currency({'code': 'FR'})

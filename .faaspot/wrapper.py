@@ -152,9 +152,10 @@ def wrapper_exchange(*args, **kwargs):
 
 
 wrapper_country_currency_schema = {
-    'required': ['country'],
+    'oneOf': [{'required': ['name']}, {'required': ['code']}],
     'properties':  {
-        'country': {'type': 'string'}
+        'name': {'type': 'string'},
+        'code': {'type': 'string'}
     }}
 
 @endpoint(wrapper_country_currency_schema)
